@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+.Al-btn {
+    @apply w-14 text-2xl aspect-square rounded-lg flex justify-center items-center cursor-pointer
+}

@@ -8,7 +8,7 @@ type AlphabethButtonType = {
 
 function AlphabethButton({ word, chara, addChara, currentWord }: AlphabethButtonType ) {
     const check = () => {
-        if (word.includes(chara) && !currentWord.includes(chara)) {
+        if (word.includes(chara) && (!currentWord.includes(chara))) {
             return 'pointer-events-none opacity-55 bg-red-200'
         } else if (word.includes(chara) && currentWord.includes(chara)) {
             return 'pointer-events-none bg-green-200'

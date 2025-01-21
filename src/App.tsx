@@ -11,19 +11,22 @@ function App() {
   const alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: KeyboardEvent) => { // Type annotation here
       if (event.key.match(/[a-z]/i)) {
-        if (word.includes(event.key)) return
-        addChara(event.key);
-      } 
+        const charaToAdd = event.key.toString()
+        console.log('charaToAdd: ' + charaToAdd)
+        addChara(charaToAdd)
+      } else {
+        console.log('object')
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
+    }
+  }, [])
 
   const fetchWord = async () => {
     const response = await fetch('https://random-word-api.vercel.app/api?words=1')
@@ -36,6 +39,8 @@ function App() {
     } else {
       setCurrentWord(data[0])
       setIsLoading(false)
+      setIsCorrect(false)
+      setWord('')
     }
   }
 
@@ -46,14 +51,14 @@ function App() {
   useEffect(() => {
     if (lives > 0) return
 
-    alert('You have ran out of chances, click ok to restart the game.')
+    alert('You have ran out of chances, the word was ' + currentWord)
     setLives(9)
     fetchWord()
   }, [lives])
 
   useEffect(() => {
     if (currentWord === '') return
-
+    
     let allContained = true;
     for (let char of currentWord) {
       if (word.indexOf(char) === -1) { // Or !mainString.includes(char)
@@ -65,21 +70,18 @@ function App() {
     if (allContained) {
       alert('Correct! The chosen word is ' + currentWord)
       setWord('')
-      fetchWord()
       setLives(9)
+      fetchWord()
+      setIsCorrect(true)
     }
   }, [word])
 
   const addChara = (chara: string) => {
-    console.log(currentWord)
-    console.log(currentWord.includes(chara))
-    console.log(word)
-    if (currentWord.includes(chara)) {
-      console.log('object')
-      setWord(word + chara)
-    } else {
+    setWord(prev => prev + chara)
+
+    if (!currentWord.includes(chara)) {
       setLives(prev => prev - 1)
-    }
+    } 
   }
 
   return (

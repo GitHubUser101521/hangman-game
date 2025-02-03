@@ -56,7 +56,6 @@ function App() {
   }, [lives])
 
   useEffect(() => {
-    console.log(word)
     if (currentWord === '') return
     
     let allContained = true;

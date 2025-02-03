@@ -11,14 +11,13 @@ function App() {
   const alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => { // Type annotation here
-      if (event.key.match(/[a-z]/i)) {
-        const charaToAdd = event.key.toString()
-        console.log('charaToAdd: ' + charaToAdd)
-        addChara(charaToAdd)
-      } else {
-        console.log('object')
-      }
+    const handleKeyDown = (event: KeyboardEvent) => { 
+        if (word.includes(event.key)) return
+
+        if (event.key.match(/[a-z]/i)) {
+            const charaToAdd = event.key.toString()
+            addChara(charaToAdd)
+        } 
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -26,7 +25,7 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     }
-  }, [])
+  }, [word])
 
   const fetchWord = async () => {
     const response = await fetch('https://random-word-api.vercel.app/api?words=1')
@@ -57,11 +56,12 @@ function App() {
   }, [lives])
 
   useEffect(() => {
+    console.log(word)
     if (currentWord === '') return
     
     let allContained = true;
     for (let char of currentWord) {
-      if (word.indexOf(char) === -1) { // Or !mainString.includes(char)
+      if (word.indexOf(char) === -1) { 
         allContained = false;
         break;
       }
